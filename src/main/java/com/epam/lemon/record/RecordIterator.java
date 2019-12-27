@@ -14,14 +14,12 @@ public class RecordIterator implements Iterator<Record> {
 
   private final Copybook recordStructure;
   private final byte[] value;
-  private final Encoding sourceEncoding;
   private final int maxCursorValue;
   private final int recordLength;
   private int valuePosition = 0;
 
-  public RecordIterator(Copybook recordStructure, byte[] value, Encoding sourceEncoding) {
+  public RecordIterator(Copybook recordStructure, byte[] value) {
     this.recordStructure = recordStructure;
-    this.sourceEncoding = sourceEncoding;
     this.value = value;
     recordLength = determineRecordLength();
     maxCursorValue = value.length;
@@ -54,7 +52,6 @@ public class RecordIterator implements Iterator<Record> {
   public Record next() {
     if (hasNext()) {
       Record record = new Record(recordStructure);
-      record.setEncoding(sourceEncoding);
       record.setValue(Arrays.copyOfRange(value, valuePosition, valuePosition + recordLength));
       valuePosition += recordLength;
       return record;

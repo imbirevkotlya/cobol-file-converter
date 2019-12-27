@@ -74,7 +74,6 @@ public class CobolConverter {
       }
     }
     resultRecord.setValue(buffer.array());
-    resultRecord.setEncoding(targetEncoding);
     return resultRecord;
   }
 }

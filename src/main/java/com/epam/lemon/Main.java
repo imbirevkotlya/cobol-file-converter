@@ -17,7 +17,7 @@ public class Main {
     Copybook copybook = new CopybookParser().parse(
             new CopybookStatementIterator(Files.readAllBytes(Path.of("src/main/resources/PERSINFO.cpy"))));
     byte[] convert = new CobolConverter().convert(new RecordIterator(copybook,
-            Files.readAllBytes(Path.of("src/main/resources/ebc_TEST")), Encoding.EBCDIC), Encoding.EBCDIC, Encoding.ASCII);
-    Files.write(Path.of("src/main/resources/asc_TEST"), convert);
+            Files.readAllBytes(Path.of("src/main/resources/TEST"))), Encoding.ASCII, Encoding.EBCDIC);
+    Files.write(Path.of("src/main/resources/ebc_TEST"), convert);
   }
 }
