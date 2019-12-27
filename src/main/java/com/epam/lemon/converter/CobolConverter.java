@@ -29,7 +29,7 @@ public class CobolConverter {
   }
 
   public byte[] convert(RecordIterator dataFileIterator, Encoding sourceEncoding,  Encoding targetEncoding) throws InvalidDataException {
-    Dataset dataset = new Dataset();
+    Dataset dataset = new Dataset(dataFileIterator.getValue().length);
     while (dataFileIterator.hasNext()) {
       Record record = dataFileIterator.next();
       record = convertRecord(record, sourceEncoding, targetEncoding);
@@ -38,7 +38,7 @@ public class CobolConverter {
     return dataset.getDataFile();
   }
 
-  private Record convertRecord(Record record, Encoding sourceEncoding, Encoding targetEncoding) {
+  private Record convertRecord(Record record, Encoding sourceEncoding, Encoding targetEncoding) throws InvalidDataException {
     byte[] recordValue = record.getValue();
     Record resultRecord = new Record(record.getRecordStructure());
     ByteBuffer buffer = ByteBuffer.allocate(recordValue.length);

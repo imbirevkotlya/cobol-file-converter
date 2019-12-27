@@ -9,8 +9,10 @@ import java.util.List;
 public class Dataset {
 
   private final List<Record> records;
+  private final Integer datasetLength;
 
-  public Dataset() {
+  public Dataset(Integer datasetLength) {
+    this.datasetLength = datasetLength;
     this.records = new ArrayList<>();
   }
 
@@ -23,14 +25,10 @@ public class Dataset {
   }
 
   public byte[] getDataFile() {
-    int length = 0;
-    for (Record record : records) {
-      length += record.getValue().length;
-    }
-    ByteBuffer buffer = ByteBuffer.allocate(length);
+    ByteBuffer buffer = ByteBuffer.allocate(datasetLength);
     for (Record record : records) {
       buffer.put(record.getValue());
     }
-    return buffer.compact().array();
+    return buffer.array();
   }
 }
