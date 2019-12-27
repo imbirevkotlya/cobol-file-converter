@@ -1,6 +1,8 @@
 package com.epam.lemon.dataset;
 
 import com.epam.lemon.record.Record;
+
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,14 @@ public class Dataset {
   }
 
   public byte[] getDataFile() {
-    return null;
+    int length = 0;
+    for (Record record : records) {
+      length += record.getValue().length;
+    }
+    ByteBuffer buffer = ByteBuffer.allocate(length);
+    for (Record record : records) {
+      buffer.put(record.getValue());
+    }
+    return buffer.compact().array();
   }
 }

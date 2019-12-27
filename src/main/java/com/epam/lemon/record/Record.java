@@ -31,8 +31,4 @@ public class Record {
   public void setEncoding(Encoding encoding) {
     this.encoding = encoding;
   }
-
-  public void convert(Encoding targetEncoding) {
-
-  }
 }
