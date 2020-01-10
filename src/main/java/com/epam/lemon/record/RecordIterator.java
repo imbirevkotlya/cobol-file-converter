@@ -5,60 +5,83 @@ import com.epam.lemon.statement.DataDeclarationCobolStatement;
 import com.epam.lemon.statement.GroupDataDeclarationCobolStatement;
 import com.epam.lemon.statement.RegularDataDeclarationCobolStatement;
 import com.epam.lemon.statement.StatementType;
-
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * Class represents the iteration pattern for the mainframe records.
+ */
 public class RecordIterator implements Iterator<Record> {
 
   private final Copybook recordStructure;
   private final byte[] value;
-  private final Encoding sourceEncoding;
-  private final int maxCursorValue;
+  private final int datasetLength;
   private final int recordLength;
-  private int valuePosition = 0;
 
-  public RecordIterator(Copybook recordStructure, byte[] value, Encoding sourceEncoding) {
+  private int cursor;
+
+  /**
+   * Main object consructor. The record length will be calculated via the copybook presentation
+   *
+   * @param recordStructure is a COBOL record organization representation.
+   * @param value is a raw dataset value
+   */
+  public RecordIterator(Copybook recordStructure, byte[] value) {
     this.recordStructure = recordStructure;
-    this.sourceEncoding = sourceEncoding;
     this.value = value;
     recordLength = determineRecordLength();
-    maxCursorValue = value.length;
+    datasetLength = value.length;
   }
 
   private Integer determineRecordLength() {
-    Integer length = 0;
-    for (DataDeclarationCobolStatement cobolStatement : recordStructure.getCobolStatements()) {
-      if (cobolStatement.getStatementType().equals(StatementType.GROUP_STATEMENT)) {
-        GroupDataDeclarationCobolStatement groupStatement = (GroupDataDeclarationCobolStatement) cobolStatement;
-        for (DataDeclarationCobolStatement childrenStatement : groupStatement.getChildrenStatements()) {
-          RegularDataDeclarationCobolStatement regularStatement = (RegularDataDeclarationCobolStatement) childrenStatement;
-          length += regularStatement.getLength();
+    int recordLength = 0;
+    for (DataDeclarationCobolStatement statement : recordStructure.getCobolStatements()) {
+      if (statement.getStatementType().equals(StatementType.GROUP_STATEMENT)) {
+        GroupDataDeclarationCobolStatement groupStatement = (GroupDataDeclarationCobolStatement) statement;
+        for (DataDeclarationCobolStatement childStatement : groupStatement
+            .getChildrenStatements()) {
+          recordLength += ((RegularDataDeclarationCobolStatement) childStatement).getLength();
         }
-      }
-      else {
-        RegularDataDeclarationCobolStatement regularStatement = (RegularDataDeclarationCobolStatement) cobolStatement;
-        length += regularStatement.getLength();
+      } else {
+        recordLength += ((RegularDataDeclarationCobolStatement) statement).getLength();
       }
     }
-    return length;
+    return recordLength;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public boolean hasNext() {
-    return valuePosition < maxCursorValue;
+    return cursor < datasetLength;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Record next() {
     if (hasNext()) {
-      Record record = new Record(recordStructure);
-      record.setEncoding(sourceEncoding);
-      record.setValue(Arrays.copyOfRange(value, valuePosition, valuePosition + recordLength));
-      valuePosition += recordLength;
+      int actualRecordLength =
+          recordLength > (this.value.length - cursor) ? (this.value.length - cursor) : recordLength;
+      Record record = new Record(recordStructure, actualRecordLength);
+      byte[] buffer = new byte[actualRecordLength];
+      System.arraycopy(this.value, cursor, buffer, 0, actualRecordLength);
+      record.setValue(buffer);
+      cursor += actualRecordLength;
       return record;
     }
     throw new NoSuchElementException();
   }
+
+  /**
+   * Method returns the dataset raw value.
+   *
+   * @return the dataset raw value.
+   */
+  public byte[] getValue() {
+    return value;
+  }
+
 }
