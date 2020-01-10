@@ -9,6 +9,9 @@ import com.epam.lemon.statement.StatementType;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * Class represents the iteration pattern for the mainframe records.
+ */
 public class RecordIterator implements Iterator<Record> {
 
   private final Copybook recordStructure;
@@ -18,6 +21,13 @@ public class RecordIterator implements Iterator<Record> {
 
   private int cursor;
 
+  /**
+   * Main object consructor.
+   * The record length will be calculated via the copybook presentation
+   *
+   * @param recordStructure is a COBOL record organization representation.
+   * @param value is a raw dataset value
+   */
   public RecordIterator(Copybook recordStructure, byte[] value) {
     this.recordStructure = recordStructure;
     this.value = value;
@@ -41,11 +51,17 @@ public class RecordIterator implements Iterator<Record> {
     return recordLength;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public boolean hasNext() {
     return cursor < datasetLength;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Record next() {
     if (hasNext()) {
@@ -60,6 +76,10 @@ public class RecordIterator implements Iterator<Record> {
     throw new NoSuchElementException();
   }
 
+  /**
+   * Method returns the dataset raw value.
+   * @return the dataset raw value.
+   */
   public byte[] getValue() {
     return value;
   }

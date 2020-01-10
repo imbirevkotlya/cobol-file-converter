@@ -18,16 +18,40 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * The main library class to work with: converter from one encoding to another.
+ */
 public class CobolConverter {
 
   private final List<FieldConverter> fieldConverters;
 
+  /**
+   * Main object constructor.
+   *
+   * The main function is a field conversion registering.
+   */
   public CobolConverter() {
     fieldConverters = new ArrayList<>();
     fieldConverters.add(new IntegerFieldConverter());
     fieldConverters.add(new AlphanumericFieldConverter());
   }
 
+  /**
+   * Main converter method to convert mainframe dataset from one encoding to another.
+   *
+   * NOTICE:
+   * If you have some fields with (for example) length 5 and real data contains only 2 bytes,
+   * you need to fill to 5 length real data with zeroes or spaces. (if not - the exception will be thrown)
+   *
+   * Supported field types and copybook limits are described in the dependency library.
+   *
+   * @param dataFileIterator is a record source to iterate throw it
+   * @param sourceEncoding is a initial dataset encoding
+   * @param targetEncoding is a target encoding to convert to
+   * @return the converted dataset in target encoding
+   * @throws InvalidDataException when the dataset raw presentation is not satisfying the copybook
+   * (record structure) rules.
+   */
   public byte[] convert(RecordIterator dataFileIterator, Encoding sourceEncoding, Encoding targetEncoding) throws InvalidDataException {
     Dataset dataset = new Dataset(dataFileIterator.getValue().length);
     while (dataFileIterator.hasNext()) {
@@ -55,6 +79,9 @@ public class CobolConverter {
     return resultRecord;
   }
 
+  /**
+   * Internal class represents the iteration approach for the field values from the specified record.
+   */
   private static class FieldValueIterator implements Iterator<FieldValue> {
 
     private final Record record;
@@ -101,11 +128,17 @@ public class CobolConverter {
       }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasNext() {
       return cursor < fieldValues.size();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public FieldValue next() {
       if (hasNext()) {
@@ -115,6 +148,9 @@ public class CobolConverter {
     }
   }
 
+  /**
+   * Internal class represents a one field value (raw bytes) with type.
+   */
   private static class FieldValue {
 
     private final byte[] value;
