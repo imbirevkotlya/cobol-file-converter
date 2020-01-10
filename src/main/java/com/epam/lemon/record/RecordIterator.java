@@ -31,11 +31,11 @@ public class RecordIterator implements Iterator<Record> {
     for (DataDeclarationCobolStatement statement : recordStructure.getCobolStatements()) {
       if (statement.getStatementType().equals(StatementType.GROUP_STATEMENT)) {
         GroupDataDeclarationCobolStatement groupStatement = (GroupDataDeclarationCobolStatement) statement;
-        for (DataDeclarationCobolStatement childStatement : groupStatement.getChildrenStatements()) {
+        for (DataDeclarationCobolStatement childStatement : groupStatement
+            .getChildrenStatements()) {
           recordLength += ((RegularDataDeclarationCobolStatement) childStatement).getLength();
         }
-      }
-      else {
+      } else {
         recordLength += ((RegularDataDeclarationCobolStatement) statement).getLength();
       }
     }
@@ -50,7 +50,7 @@ public class RecordIterator implements Iterator<Record> {
   @Override
   public Record next() {
     if (hasNext()) {
-      Record record = new Record(recordStructure);
+      Record record = new Record(recordStructure, recordLength);
       record.setValue(Arrays.copyOfRange(value, cursor, cursor + recordLength));
       cursor += recordLength;
       return record;
@@ -62,7 +62,4 @@ public class RecordIterator implements Iterator<Record> {
     return value;
   }
 
-  public int getRecordLength() {
-    return recordLength;
-  }
 }

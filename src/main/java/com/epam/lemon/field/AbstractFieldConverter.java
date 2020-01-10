@@ -1,5 +1,6 @@
 package com.epam.lemon.field;
 
+import com.epam.lemon.exception.InvalidDataException;
 import com.epam.lemon.record.Encoding;
 
 public abstract class AbstractFieldConverter implements FieldConverter {
@@ -15,6 +16,6 @@ public abstract class AbstractFieldConverter implements FieldConverter {
     protected abstract boolean isConvertedField();
 
     protected byte[] convert(byte[] value, Encoding sourceEncoding, Encoding targetEncoding) {
-        return null;
+        throw new InvalidDataException("Such field has no conversion abilities yet!");
     }
 }
