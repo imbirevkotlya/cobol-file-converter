@@ -20,10 +20,6 @@ public class Dataset {
     records.add(record);
   }
 
-  public List<Record> getRecords() {
-    return records;
-  }
-
   public byte[] getDataFile() {
     ByteBuffer buffer = ByteBuffer.allocate(datasetLength);
     for (Record record : records) {
