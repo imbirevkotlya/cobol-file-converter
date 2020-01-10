@@ -96,7 +96,8 @@ public class CobolConverter {
         startPosition += fieldLength;
         fieldValues.add(fieldValue);
       } catch (Exception e) {
-        throw new InvalidDataException(e);
+        throw new InvalidDataException("Such field is wrong typed: " + field.getName()
+            + ", in such record with value: " + Arrays.toString(recordValue));
       }
     }
 
