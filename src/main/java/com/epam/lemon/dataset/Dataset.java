@@ -1,7 +1,6 @@
 package com.epam.lemon.dataset;
 
 import com.epam.lemon.record.Record;
-
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +16,8 @@ public class Dataset {
   /**
    * Main dataset constructor with determined length of raw data inside it.
    *
-   * @param datasetLength is a length of the byte array,
-   * which is represented via records list (can be added via the addRecord method)
+   * @param datasetLength is a length of the byte array, which is represented via records list (can
+   * be added via the addRecord method)
    */
   public Dataset(Integer datasetLength) {
     this.datasetLength = datasetLength;

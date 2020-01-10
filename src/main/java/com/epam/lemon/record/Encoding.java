@@ -1,8 +1,8 @@
 package com.epam.lemon.record;
 
 /**
- * Class represents the supported encodings to convert from or to.
- * All supported encodings (can be added here) are described here: Charset.fromString();
+ * Class represents the supported encodings to convert from or to. All supported encodings (can be
+ * added here) are described here: Charset.fromString();
  */
 public enum Encoding {
 
@@ -23,6 +23,7 @@ public enum Encoding {
 
   /**
    * Method returns the charset for the Java charset determination
+   *
    * @return the Java charset to use it in the Charset.from...()
    */
   public String getCharset() {

@@ -5,7 +5,6 @@ import com.epam.lemon.statement.DataDeclarationCobolStatement;
 import com.epam.lemon.statement.GroupDataDeclarationCobolStatement;
 import com.epam.lemon.statement.RegularDataDeclarationCobolStatement;
 import com.epam.lemon.statement.StatementType;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -22,8 +21,7 @@ public class RecordIterator implements Iterator<Record> {
   private int cursor;
 
   /**
-   * Main object consructor.
-   * The record length will be calculated via the copybook presentation
+   * Main object consructor. The record length will be calculated via the copybook presentation
    *
    * @param recordStructure is a COBOL record organization representation.
    * @param value is a raw dataset value
@@ -65,7 +63,8 @@ public class RecordIterator implements Iterator<Record> {
   @Override
   public Record next() {
     if (hasNext()) {
-      int actualRecordLength = recordLength > (this.value.length - cursor) ? (this.value.length - cursor) : recordLength;
+      int actualRecordLength =
+          recordLength > (this.value.length - cursor) ? (this.value.length - cursor) : recordLength;
       Record record = new Record(recordStructure, actualRecordLength);
       byte[] buffer = new byte[actualRecordLength];
       System.arraycopy(this.value, cursor, buffer, 0, actualRecordLength);
@@ -78,6 +77,7 @@ public class RecordIterator implements Iterator<Record> {
 
   /**
    * Method returns the dataset raw value.
+   *
    * @return the dataset raw value.
    */
   public byte[] getValue() {

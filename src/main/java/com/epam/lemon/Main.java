@@ -8,5 +8,6 @@ public class Main {
   /**
    * Stub method for jar generation
    */
-  public static void main(String[] args) {}
+  public static void main(String[] args) {
+  }
 }

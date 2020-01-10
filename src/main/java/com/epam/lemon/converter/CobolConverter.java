@@ -2,7 +2,9 @@ package com.epam.lemon.converter;
 
 import com.epam.lemon.dataset.Dataset;
 import com.epam.lemon.exception.InvalidDataException;
-import com.epam.lemon.field.*;
+import com.epam.lemon.field.AlphanumericFieldConverter;
+import com.epam.lemon.field.FieldConverter;
+import com.epam.lemon.field.IntegerFieldConverter;
 import com.epam.lemon.record.Encoding;
 import com.epam.lemon.record.Record;
 import com.epam.lemon.record.RecordIterator;
@@ -10,7 +12,6 @@ import com.epam.lemon.statement.DataDeclarationCobolStatement;
 import com.epam.lemon.statement.GroupDataDeclarationCobolStatement;
 import com.epam.lemon.statement.RegularDataDeclarationCobolStatement;
 import com.epam.lemon.statement.StatementType;
-
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,9 +40,9 @@ public class CobolConverter {
   /**
    * Main converter method to convert mainframe dataset from one encoding to another.
    *
-   * NOTICE:
-   * If you have some fields with (for example) length 5 and real data contains only 2 bytes,
-   * you need to fill to 5 length real data with zeroes or spaces. (if not - the exception will be thrown)
+   * NOTICE: If you have some fields with (for example) length 5 and real data contains only 2
+   * bytes, you need to fill to 5 length real data with zeroes or spaces. (if not - the exception
+   * will be thrown)
    *
    * Supported field types and copybook limits are described in the dependency library.
    *
@@ -52,7 +53,8 @@ public class CobolConverter {
    * @throws InvalidDataException when the dataset raw presentation is not satisfying the copybook
    * (record structure) rules.
    */
-  public byte[] convert(RecordIterator dataFileIterator, Encoding sourceEncoding, Encoding targetEncoding) throws InvalidDataException {
+  public byte[] convert(RecordIterator dataFileIterator, Encoding sourceEncoding,
+      Encoding targetEncoding) throws InvalidDataException {
     Dataset dataset = new Dataset(dataFileIterator.getValue().length);
     while (dataFileIterator.hasNext()) {
       Record record = dataFileIterator.next();
@@ -62,14 +64,16 @@ public class CobolConverter {
     return dataset.getDataFile();
   }
 
-  private Record convertRecord(Record record, Encoding sourceEncoding, Encoding targetEncoding) throws InvalidDataException {
+  private Record convertRecord(Record record, Encoding sourceEncoding, Encoding targetEncoding)
+      throws InvalidDataException {
     FieldValueIterator fieldValueIterator = new FieldValueIterator(record, record.getLength());
     ByteBuffer buffer = ByteBuffer.allocate(record.getLength());
     while (fieldValueIterator.hasNext()) {
       FieldValue fieldValue = fieldValueIterator.next();
       for (FieldConverter fieldConverter : fieldConverters) {
         if (fieldConverter.getStatementType().equals(fieldValue.fieldType)) {
-          byte[] resultValue = fieldConverter.convertValue(fieldValue.value, sourceEncoding, targetEncoding);
+          byte[] resultValue = fieldConverter
+              .convertValue(fieldValue.value, sourceEncoding, targetEncoding);
           buffer.put(resultValue);
         }
       }
@@ -80,7 +84,8 @@ public class CobolConverter {
   }
 
   /**
-   * Internal class represents the iteration approach for the field values from the specified record.
+   * Internal class represents the iteration approach for the field values from the specified
+   * record.
    */
   private static class FieldValueIterator implements Iterator<FieldValue> {
 
@@ -96,12 +101,12 @@ public class CobolConverter {
 
     private void initFields() {
       byte[] recordValue = record.getValue();
-      List<DataDeclarationCobolStatement> recordFields = record.getRecordStructure().getCobolStatements();
+      List<DataDeclarationCobolStatement> recordFields = record.getRecordStructure()
+          .getCobolStatements();
       for (DataDeclarationCobolStatement field : recordFields) {
         if (field.getStatementType().equals(StatementType.GROUP_STATEMENT)) {
           initGroupField(recordValue, (GroupDataDeclarationCobolStatement) field);
-        }
-        else {
+        } else {
           initRegularField(recordValue, (RegularDataDeclarationCobolStatement) field);
         }
       }

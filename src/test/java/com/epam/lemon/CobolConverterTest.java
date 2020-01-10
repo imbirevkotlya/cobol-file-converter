@@ -28,11 +28,13 @@ public class CobolConverterTest {
   @Test
   public void convertFile_fromAsciiToEbcdic() throws IOException {
     Copybook copybook = copybookParser.parse(
-        new CopybookStatementIterator(Files.readAllBytes(Paths.get("src/test/resources/PERSINFO.cpy"))));
+        new CopybookStatementIterator(
+            Files.readAllBytes(Paths.get("src/test/resources/PERSINFO.cpy"))));
     RecordIterator dataFileIterator = new RecordIterator(copybook,
         Files.readAllBytes(Paths.get("src/test/resources/asc_TEST")));
 
-    byte[] convertedDataset = cobolConverter.convert(dataFileIterator, Encoding.ASCII, Encoding.EBCDIC);
+    byte[] convertedDataset = cobolConverter
+        .convert(dataFileIterator, Encoding.ASCII, Encoding.EBCDIC);
 
     byte[] expectedArray = {57, 57, -63, -63, -63, 57, 56, -63, -63, -62};
     Assert.assertArrayEquals(expectedArray, convertedDataset);
@@ -41,11 +43,13 @@ public class CobolConverterTest {
   @Test
   public void convertFile_fromEbcdicToAscii() throws IOException {
     Copybook copybook = copybookParser.parse(
-        new CopybookStatementIterator(Files.readAllBytes(Paths.get("src/test/resources/PERSINFO.cpy"))));
+        new CopybookStatementIterator(
+            Files.readAllBytes(Paths.get("src/test/resources/PERSINFO.cpy"))));
     RecordIterator dataFileIterator = new RecordIterator(copybook,
         Files.readAllBytes(Paths.get("src/test/resources/ebc_TEST")));
 
-    byte[] convertedDataset = cobolConverter.convert(dataFileIterator, Encoding.EBCDIC, Encoding.ASCII);
+    byte[] convertedDataset = cobolConverter
+        .convert(dataFileIterator, Encoding.EBCDIC, Encoding.ASCII);
 
     byte[] expectedArray = {57, 57, 65, 65, 65, 57, 56, 65, 65, 66};
     Assert.assertArrayEquals(expectedArray, convertedDataset);
@@ -54,11 +58,13 @@ public class CobolConverterTest {
   @Test
   public void convertFile_emptyFieldWithSpaces() throws IOException {
     Copybook copybook = copybookParser.parse(
-        new CopybookStatementIterator(Files.readAllBytes(Paths.get("src/test/resources/PERSINFO.cpy"))));
+        new CopybookStatementIterator(
+            Files.readAllBytes(Paths.get("src/test/resources/PERSINFO.cpy"))));
     RecordIterator dataFileIterator = new RecordIterator(copybook,
         Files.readAllBytes(Paths.get("src/test/resources/emp_TEST")));
 
-    byte[] convertedDataset = cobolConverter.convert(dataFileIterator, Encoding.ASCII, Encoding.EBCDIC);
+    byte[] convertedDataset = cobolConverter
+        .convert(dataFileIterator, Encoding.ASCII, Encoding.EBCDIC);
 
     byte[] expectedArray = {57, 57, -63, -63, -63, 57, 56, 64, 64, 64};
     Assert.assertArrayEquals(expectedArray, convertedDataset);
@@ -67,7 +73,8 @@ public class CobolConverterTest {
   @Test(expected = InvalidDataException.class)
   public void convertFile_emptyField() throws IOException {
     Copybook copybook = copybookParser.parse(
-        new CopybookStatementIterator(Files.readAllBytes(Paths.get("src/test/resources/PERSINFO.cpy"))));
+        new CopybookStatementIterator(
+            Files.readAllBytes(Paths.get("src/test/resources/PERSINFO.cpy"))));
     RecordIterator dataFileIterator = new RecordIterator(copybook,
         Files.readAllBytes(Paths.get("src/test/resources/empfield_TEST")));
 

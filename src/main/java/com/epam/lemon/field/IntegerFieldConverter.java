@@ -7,19 +7,19 @@ import com.epam.lemon.statement.StatementType;
  */
 public class IntegerFieldConverter extends AbstractFieldConverter {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected boolean isConvertedField() {
-        return false;
-    }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean isConvertedField() {
+    return false;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public StatementType getStatementType() {
-        return StatementType.INTEGER_STATEMENT;
-    }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public StatementType getStatementType() {
+    return StatementType.INTEGER_STATEMENT;
+  }
 }
