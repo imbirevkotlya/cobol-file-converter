@@ -3,19 +3,10 @@ package com.epam.lemon.dataset;
 import com.epam.lemon.copybook.Copybook;
 import java.util.Iterator;
 
-public abstract class RecordIterator implements Iterator<byte[]> {
+public interface RecordIterator extends Iterator<byte[]> {
 
-  protected final Copybook copybook;
-  protected final byte[] dataset;
+  Copybook getRecordStructure();
 
-  public RecordIterator(Copybook copybook, byte[] dataset) {
-    this.copybook = copybook;
-    this.dataset = dataset;
-  }
+  Integer getRecordLength();
 
-  public Copybook getCopybook() {
-    return copybook;
-  }
-
-  public abstract Integer getRecordLength();
 }

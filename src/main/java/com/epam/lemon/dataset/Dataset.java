@@ -12,7 +12,7 @@ public abstract class Dataset implements Convertable {
   protected final Integer recordLength;
 
   public Dataset(RecordIterator recordIterator) {
-    this.recordStructure = recordIterator.getCopybook();
+    this.recordStructure = recordIterator.getRecordStructure();
     this.recordLength = recordIterator.getRecordLength();
   }
 }
