@@ -1,4 +1,4 @@
-package com.epam.lemon.record;
+package com.epam.lemon.encoding;
 
 /**
  * Class represents the supported encodings to convert from or to. All supported encodings (can be

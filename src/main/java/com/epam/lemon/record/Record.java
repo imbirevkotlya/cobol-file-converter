@@ -1,66 +1,31 @@
 package com.epam.lemon.record;
 
+import com.epam.lemon.Convertable;
 import com.epam.lemon.copybook.Copybook;
-import com.epam.lemon.exception.InvalidDataException;
+import com.epam.lemon.encoding.Encoding;
+import com.epam.lemon.field.Field;
+import java.util.Collections;
+import java.util.List;
 
 /**
- * Class represents the mainframe one record (value, structure, determined by copybook and length).
+ * The class represents the mainframe record as a container for the information.
  */
-public class Record {
+public class Record implements Convertable {
 
-  private final Copybook recordStructure;
-  private byte[] value;
-  private final Integer length;
+  private final List<Field> fields;
 
-  /**
-   * Main record constructor.
-   *
-   * @param recordStructure is a record definition using the COBOL copybook.
-   * @param length is a record length (actual data length)
-   */
-  public Record(Copybook recordStructure, Integer length) {
-    this.recordStructure = recordStructure;
-    this.length = length;
+  public Record(Copybook recordStructure, Integer recordLength, byte[] value) {
+    fields = initFields();
   }
 
-  /**
-   * Method returns the record definition in COBOL copybook view.
-   *
-   * @return the record organization
-   */
-  public Copybook getRecordStructure() {
-    return recordStructure;
+  private List<Field> initFields() {
+    return Collections.emptyList();
   }
 
-  /**
-   * Method returns the record value in raw bytes.
-   *
-   * @return the record value in raw bytes.
-   */
-  public byte[] getValue() {
-    return value;
-  }
-
-  /**
-   * Method to set record value in raw bytes. Encoding is not should be specified.
-   *
-   * @param value the record raw bytes
-   */
-  public void setValue(byte[] value) {
-    if (value.length != length) {
-      throw new InvalidDataException(
-          "Such field has invalid format, actual data length = " + value.length
-              + ", where the expected length should be = " + length);
+  @Override
+  public void convert(Encoding targetEncoding) {
+    for (Field field : fields) {
+      field.convert(targetEncoding);
     }
-    this.value = value;
-  }
-
-  /**
-   * Method to get actual record length.
-   *
-   * @return the actual record length
-   */
-  public Integer getLength() {
-    return length;
   }
 }
